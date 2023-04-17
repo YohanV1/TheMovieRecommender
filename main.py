@@ -15,7 +15,7 @@ def convert(obj):
 
 def convert_actors(obj):
     L = []
-    c=0
+    c = 0
     for i in ast.literal_eval(obj):
         if c != 5:
             L.append(i['name'])
@@ -34,11 +34,11 @@ def fetch_director(obj):
     return L
 
 
-# def stem(text):
-#     y = []
-#     for i in text.split():
-#         y.append(ps.stem(i))
-#     return " ".join(y)
+def stem(text):
+    y = []
+    for i in text.split():
+        y.append(ps.stem(i))
+    return " ".join(y)
 
 
 def recommend(movie):
@@ -48,7 +48,7 @@ def recommend(movie):
                          key=lambda x: x[1])
 
     res = []
-    for i in movies_list[1:7]:
+    for i in movies_list[1:10]:
         res.append(data.iloc[i[0]].title)
     return res
 
@@ -90,8 +90,8 @@ data['tags'] = data['tags'].apply(lambda x:x.lower())
 cv = CountVectorizer(max_features=5000, stop_words='english')
 vectors = cv.fit_transform(data['tags']).toarray()
 
-# ps = PorterStemmer()
-# data['tags'] = data['tags'].apply(stem)
+ps = PorterStemmer()
+data['tags'] = data['tags'].apply(stem)
 similarity = cosine_similarity(vectors)
 
 titles = list(data['title'])
