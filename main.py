@@ -35,8 +35,6 @@ def fetch_director(obj):
 
 
 def fetch_poster(movie_id):
-    with open('apikey.txt', 'r') as f:
-        your_api_key = f.read().strip()
     url = f"https://api.themoviedb.org/3/movie/{{}}?api_key={your_api_key}&language=en-US".format(movie_id)
     data = requests.get(url)
     data = data.json()
