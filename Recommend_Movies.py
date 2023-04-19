@@ -18,10 +18,6 @@ if st.session_state['movie_tracker'] == -1:
 
     st.session_state['movie_index'] = main.titles.index(option)
 
-    if st.button(option, key=0):
-        st.session_state['movie_tracker'] = 10
-        st.experimental_rerun()
-
     movie_id = main.movies.iloc[st.session_state['movie_index']].id
 
     st.image(main.fetch_poster(movie_id), width=200)

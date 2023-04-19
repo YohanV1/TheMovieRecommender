@@ -33,9 +33,11 @@ def fetch_director(obj):
             break
     return L
 
+
 def fetch_poster(movie_id):
-    url = "https://api.themoviedb.org/3/movie/{}?api_key=" \
-          "433ff6eeee0036e8693c029787f184c5&language=en-US".format(movie_id)
+    with open('apikey.txt', 'r') as f:
+        your_api_key = f.read().strip()
+    url = f"https://api.themoviedb.org/3/movie/{{}}?api_key={your_api_key}&language=en-US".format(movie_id)
     data = requests.get(url)
     data = data.json()
     poster_path = data['poster_path']
