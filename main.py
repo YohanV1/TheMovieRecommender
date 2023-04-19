@@ -3,7 +3,7 @@ import numpy as np
 import ast
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
-from nltk.stem.porter import PorterStemmer
+import requests
 
 
 def convert(obj):
@@ -33,24 +33,37 @@ def fetch_director(obj):
             break
     return L
 
-
-def stem(text):
-    y = []
-    for i in text.split():
-        y.append(ps.stem(i))
-    return " ".join(y)
+def fetch_poster(movie_id):
+    url = "https://api.themoviedb.org/3/movie/{}?api_key=" \
+          "433ff6eeee0036e8693c029787f184c5&language=en-US".format(movie_id)
+    data = requests.get(url)
+    data = data.json()
+    poster_path = data['poster_path']
+    full_path = "https://image.tmdb.org/t/p/w500/" + poster_path
+    return full_path
 
 
 def recommend(movie):
-    movie_index = data[data['title'] == movie].index[0]
+    movie_index = movies[movies['title'] == movie].index[0]
     distances = similarity[movie_index]
     movies_list = sorted(list(enumerate(distances)), reverse=True,
-                         key=lambda x: x[1])
+                         key=lambda x: x[1])[1:10]
 
-    res = []
-    for i in movies_list[1:10]:
-        res.append(data.iloc[i[0]].title)
-    return res
+    recommended_movies = []
+    recommended_movie_posters = []
+    recommended_movies_summaries = []
+
+    for i in movies_list:
+        # fetch the movie poster
+        print(i)
+        movie_id = movies.iloc[i[0]].id
+        recommended_movies.append(movies.iloc[i[0]].title)
+        recommended_movies_summaries.append(' '.join(movies.iloc[i[0]].overview))
+        recommended_movie_posters.append(fetch_poster(movie_id))
+
+    print(recommended_movies, recommended_movie_posters)
+    return recommended_movies, recommended_movie_posters, \
+        recommended_movies_summaries
 
 
 credits = pd.read_csv('datasets/tmdb_5000_credits.csv')
@@ -90,8 +103,6 @@ data['tags'] = data['tags'].apply(lambda x:x.lower())
 cv = CountVectorizer(max_features=5000, stop_words='english')
 vectors = cv.fit_transform(data['tags']).toarray()
 
-ps = PorterStemmer()
-data['tags'] = data['tags'].apply(stem)
 similarity = cosine_similarity(vectors)
 
 titles = list(data['title'])

@@ -1,6 +1,5 @@
 import streamlit as st
 import main
-import requests
 
 st.set_page_config(layout="wide")
 
@@ -10,6 +9,7 @@ if 'movie_tracker' not in st.session_state:
 if 'movie_index' not in st.session_state:
     st.session_state['movie_index'] = 46
 
+
 if st.session_state['movie_tracker'] == -1:
     st.title('The Movie Recommender.')
 
@@ -18,129 +18,121 @@ if st.session_state['movie_tracker'] == -1:
 
     st.session_state['movie_index'] = main.titles.index(option)
 
-    option_img_response = requests.get(f'http://www.omdbapi.com/?t={option}&'
-                                       f'apikey=2b84cbca')
-    option_img = option_img_response.json()
+    if st.button(option, key=0):
+        st.session_state['movie_tracker'] = 10
+        st.experimental_rerun()
 
-    st.image(option_img['Poster'], width=200, caption=option)
+    movie_id = main.movies.iloc[st.session_state['movie_index']].id
 
-    rec = main.recommend(option)
-    images = []
-    summaries = []
+    st.image(main.fetch_poster(movie_id), width=200)
 
-    for i in rec:
-        images.append((i, (requests.get(
-            f'http://www.omdbapi.com/?t={i}&apikey=2b84cbca')).json()))
-        summaries.append((' '.join(str(v) for v in (
-            ((main.movies.loc[main.movies['title'] == i])['overview']).
-            to_list())[0])))
-
+    names, posters, summaries = main.recommend(option)
     st.subheader('Check out these recommendations:')
 
     col1, ecol1, col2, ecol2, col3 = st.columns([1.5, 0.5, 1.5, 0.5, 1.5])
 
     with col1:
-        b1 = st.button(images[0][0], key=1)
+        b1 = st.button(names[0], key=1)
         if b1:
             st.session_state['movie_tracker'] = 0
             st.experimental_rerun()
         try:
-            st.image(images[0][1]['Poster'], width=250)
+            st.image(posters[0], width=250)
         except KeyError:
             st.text('Poster unavailable.')
-        st.caption(f'{summaries[0]}')
+        st.caption(f'{summaries[0][:200]}...')
 
     with col2:
-        b2 = st.button(images[1][0], key=2)
+        b2 = st.button(names[1], key=2)
         if b2:
             st.session_state['movie_tracker'] = 1
             st.experimental_rerun()
         try:
-            st.image(images[1][1]['Poster'], width=250)
+            st.image(posters[1], width=250)
         except KeyError:
             st.text('Poster unavailable.')
-        st.caption(f'{summaries[1]}')
+        st.caption(f'{summaries[1][:200]}...')
 
     with col3:
-        b3 = st.button(images[2][0], key=3)
+        b3 = st.button(names[2], key=3)
         if b3:
             st.session_state['movie_tracker'] = 2
             st.experimental_rerun()
         try:
-            st.image(images[2][1]['Poster'], width=250)
+            st.image(posters[2], width=250)
         except KeyError:
             st.text('Poster unavailable.')
-        st.caption(f'{summaries[2]}')
+        st.caption(f'{summaries[2][:200]}...')
 
     col4, ecol3, col5, ecol4, col6 = st.columns([1.5, 0.5, 1.5, 0.5, 1.5])
 
     with col4:
-        b4 = st.button(images[3][0], key=4)
+        b4 = st.button(names[3], key=4)
         if b4:
             st.session_state['movie_tracker'] = 3
             st.experimental_rerun()
         try:
-            st.image(images[3][1]['Poster'], width=250)
+            st.image(posters[3], width=250)
         except KeyError:
             st.text('Poster unavailable.')
-        st.caption(f'{summaries[3]}')
+        st.caption(f'{summaries[3][:200]}...')
 
     with col5:
-        b5 = st.button(images[4][0], key=5)
+        b5 = st.button(names[4], key=5)
         if b5:
             st.session_state['movie_tracker'] = 4
             st.experimental_rerun()
         try:
-            st.image(images[4][1]['Poster'], width=250)
+            st.image(posters[4], width=250)
         except KeyError:
             st.text('Poster unavailable.')
-        st.caption(f'{summaries[4]}')
+        st.caption(f'{summaries[4][:200]}...')
 
     with col6:
-        b6 = st.button(images[5][0], key=6)
+        b6 = st.button(names[5], key=6)
         if b6:
             st.session_state['movie_tracker'] = 5
             st.experimental_rerun()
         try:
-            st.image(images[5][1]['Poster'], width=250)
+            st.image(posters[5], width=250)
         except KeyError:
             st.text('Poster unavailable.')
-        st.caption(f'{summaries[5]}')
+        st.caption(f'{summaries[5][:200]}...')
 
     col7, ecol5, col8, ecol6, col9 = st.columns([1.5, 0.5, 1.5, 0.5, 1.5])
 
     with col7:
-        b7 = st.button(images[6][0], key=7)
+        b7 = st.button(names[6], key=7)
         if b7:
             st.session_state['movie_tracker'] = 6
             st.experimental_rerun()
         try:
-            st.image(images[6][1]['Poster'], width=250)
+            st.image(posters[6], width=250)
         except KeyError:
             st.text('Poster unavailable.')
-        st.caption(f'{summaries[6]}')
+        st.caption(f'{summaries[6][:200]}...')
 
     with col8:
-        b8 = st.button(images[7][0], key=8)
+        b8 = st.button(names[7], key=8)
         if b8:
             st.session_state['movie_tracker'] = 7
             st.experimental_rerun()
         try:
-            st.image(images[7][1]['Poster'], width=250)
+            st.image(posters[7], width=250)
         except KeyError:
             st.text('Poster unavailable.')
-        st.caption(f'{summaries[7]}')
+        st.caption(f'{summaries[7][:200]}...')
 
     with col9:
-        b9 = st.button(images[8][0], key=9)
+        b9 = st.button(names[8], key=9)
         if b9:
             st.session_state['movie_tracker'] = 8
             st.experimental_rerun()
         try:
-            st.image(images[8][1]['Poster'], width=250)
+            st.image(posters[8], width=250)
         except KeyError:
             st.text('Poster unavailable.')
-        st.caption(f'{summaries[8]}')
+        st.caption(f'{summaries[8][:200]}...')
 
 else:
     b = st.button("Go back")
