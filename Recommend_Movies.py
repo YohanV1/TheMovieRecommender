@@ -4,8 +4,12 @@ import numpy as np
 import requests
 import pickle
 import time
+from send_email import send_email
+from datetime import datetime
 
 st.set_page_config(layout="wide", page_title='The Movie Recommender')
+st.sidebar.title("The Movie Recommender.")
+st.sidebar.write("hi")
 
 if 'movie_index' not in st.session_state:
     st.session_state['movie_index'] = 46
@@ -29,6 +33,22 @@ def fetch_actor_image(actor_id):
     actor_path = data['profile_path']
     full_path = "https://image.tmdb.org/t/p/original/" + str(actor_path)
     return full_path
+
+
+def fetch_reviews(movie_id):
+    url = f"https://api.themoviedb.org/3/movie/{movie_id}/reviews?" \
+          f"api_key=433ff6eeee0036e8693c029787f184c5&language=en-US&page=1"
+    data = requests.get(url)
+    data = data.json()
+    text = data['results']
+    review_details = []
+    for reviews in text:
+        d = {'author': reviews['author'],
+             'author_path': reviews['author_details']['avatar_path'],
+             'rating': reviews['author_details']['rating'],
+             'content': reviews['content'], 'review_date': reviews['created_at']}
+        review_details.append(d)
+    return review_details
 
 
 def recommend(movie):
@@ -68,10 +88,7 @@ titles = list(movies['title'])
 
 st.title('The Movie Recommender.')
 
-print(st.session_state['movie_index'])
 option = st.selectbox('Select a movie.', titles, index=st.session_state['movie_index'])
-
-print(st.session_state['movie_index'])
 
 if titles.index(option) != st.session_state['movie_index']:
     st.session_state['movie_index'] = titles.index(option)
@@ -161,7 +178,7 @@ with st.spinner(text='Loading actors...'):
     time.sleep(1)
 
 st.markdown('##')
-st.subheader("Top Billed Cast")
+st.subheader("Top billed cast.")
 st.markdown('######')
 
 num_columns = 4
@@ -184,7 +201,7 @@ with st.spinner(text='Loading recommendations...'):
     time.sleep(0.01)
 
 st.markdown('##')
-st.subheader('Check out these recommendations:')
+st.subheader('Movies you might like.')
 st.markdown('######')
 
 col1, ecol1, col2, ecol2, col3 = st.columns([1.5, 0.5, 1.5, 0.5, 1.5])
@@ -270,6 +287,78 @@ with col9:
     st.image(posters[8], width=250)
     st.write(f"Rating: {(movies_data[movies_data['id'] == ids[8]]['vote_average'].values[0]+0.6).round(1)}")
     st.caption(f'{summaries[8][:200]}...')
+
+with st.spinner("Loading reviews..."):
+    reviews = fetch_reviews(movie_id)
+    time.sleep(0.01)
+
+st.markdown('##')
+st.subheader("Reviews.")
+st.markdown('######')
+
+reviews = reviews[:10]
+
+date_str = reviews[0]['review_date'][0:10]
+date_obj = datetime.strptime(date_str, '%Y-%m-%d')
+
+new_date_str = date_obj.strftime('%B %d, %Y')
+
+with st.container():
+    col, cole = st.columns([10, 1])
+    with col:
+        st.write(f"#### **A review by {reviews[0]['author']}** "
+                 f"{'- ' + str(reviews[0]['rating'])+'/10' if reviews[0]['rating']!=None else ''}  \n"
+                   f"###### Written by {reviews[0]['author']} on {new_date_str}", unsafe_allow_html=True)
+        st.caption(f"{reviews[0]['content']}")
+
+button_placeholder = st.empty()
+if button_placeholder.button("Load more reviews."):
+    button_placeholder.empty()
+    for review in reviews[1:]:
+        date_str = review['review_date'][0:10]
+        date_obj = datetime.strptime(date_str, '%Y-%m-%d')
+        new_date_str = date_obj.strftime('%B %d, %Y')
+        with st.container():
+            col1, col1e = st.columns([10, 1])
+            with col1:
+                st.write(
+                    f"#### **A review by {review['author']}** "
+                    f"{'- ' + str(review['rating'])+'/10' if review['rating']!=None else ''}  \n"
+                    f"###### Written by {review['author']} on {new_date_str}",
+                    unsafe_allow_html=True)
+                st.caption(f"{review['content']}")
+    button_placeholder2 = st.empty()
+    if button_placeholder2.button("Show less."):
+        button_placeholder2.empty()
+        st.experimental_rerun()
+
+st.markdown('##')
+st.subheader("Watched this movie? Leave a rating and a review.")
+st.markdown('######')
+
+button_placeholder3 = st.empty()
+if button_placeholder3.button("Rate movie."):
+    button_placeholder3.empty()
+    with st.form(key="review_form"):
+        user_name = st.text_input("Your name")
+        user_email = st.text_input("Your email address")
+        rating = st.slider('Rating', 0.0, 10.0, 5.0, 0.5)
+        message = st.text_area("Your review")
+        message = f"""\
+        Subject: New review from {user_email}
+        
+        From: {user_email}
+        Username: {user_name}
+        Movie: {option}
+        Rating: {rating}
+        Review: {message}
+        """
+        button = st.form_submit_button("Submit")
+        if button:
+            send_email(message)
+            st.info("Your review was submitted successfully.")
+
+
 
 
 
