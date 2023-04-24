@@ -8,7 +8,7 @@ st.write("If you would like to contribute to the content of the app, "
          "database, or adding information about lesser-known movies, "
          "please feel free to get in touch!")
 
-with st.form(key="email_form"):
+with st.form(key="email_form", clear_on_submit=True):
     user_email = st.text_input("Your email address")
     message = st.text_area("Your message")
     message = f"""\
