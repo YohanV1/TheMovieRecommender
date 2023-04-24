@@ -8,8 +8,6 @@ from send_email import send_email
 from datetime import datetime
 
 st.set_page_config(layout="wide", page_title='The Movie Recommender')
-st.sidebar.title("The Movie Recommender.")
-st.sidebar.write("hi")
 
 if 'movie_index' not in st.session_state:
     st.session_state['movie_index'] = 46
@@ -358,6 +356,19 @@ if button_placeholder3.button("Rate movie."):
             send_email(message)
             st.info("Your review was submitted successfully.")
 
+st.sidebar.title("The Movie Recommender.")
+with st.sidebar.expander("About"):
+    st.write(f"The Movie Recommender uses cosine similarity to suggest "
+                 f"movies to users based on user input. The system "
+                 f"is built using TMDB's 5000 movie dataset. Additional information is "
+                 f"retrieved from TMDB's API."
+                 f" This project was created for a university project"
+                 f" and is still a work in progress. If you would like to give"
+                 f" feedback or contribute, the source code and documentation "
+                 f"for the project can be found "
+                 f"[here](https://github.com/YohanV1/TheMovieRecommender)."
+                 f" If you have any suggestions or questions, "
+                 f"please don't hesitate to reach out.")
 
 
 
