@@ -371,6 +371,18 @@ with st.sidebar.expander("About"):
                  f"please don't hesitate to reach out.")
 
 
+st.markdown("#")
+icol1, iecol, icol2, iecol1, icol3 = st.columns([1.5,0.5,1.5,0.5,1.5])
+
+with icol1:
+    st.info(":bulb: LinkedIn: [yohanvinu](https://www.linkedin.com/in/yohanvinu/)")
+
+with icol2:
+    st.info(":computer: GitHub: [YohanV1](https://github.com/YohanV1)")
+
+with icol3:
+    st.info(":brain: Data: [TMDB](https://www.kaggle.com/datasets/tmdb/tmdb-movie-metadata)")
+
 
 
 
