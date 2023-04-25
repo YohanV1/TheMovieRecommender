@@ -16,3 +16,17 @@ with st.form(key="email_form", clear_on_submit=True):
     if button:
         send_email(message, subject)
         st.info("Your message was sent successfully.")
+
+st.sidebar.title("The Movie Recommender.")
+with st.sidebar.expander("About"):
+    st.write(f"The Movie Recommender uses cosine similarity to suggest "
+                 f"movies based on user input. The system "
+                 f"is built using TMDB's 5000 movie dataset. Additional information is "
+                 f"retrieved from TMDB's API."
+                 f" This project was initiated for a course at my university"
+                 f" and is still a work in progress. If you would like to give"
+                 f" feedback or contribute, the source code and documentation "
+                 f"for the project can be found "
+                 f"[here](https://github.com/YohanV1/TheMovieRecommender)."
+                 f" If you have any suggestions or questions, "
+                 f"please don't hesitate to reach out.")

@@ -7,6 +7,7 @@ import time
 from send_email import send_email
 from datetime import datetime
 
+
 st.set_page_config(layout="wide", page_title='The Movie Recommender')
 
 if 'movie_index' not in st.session_state:
@@ -109,22 +110,20 @@ if titles.index(option) != st.session_state['movie_index']:
 movie_id = movies.iloc[st.session_state['movie_index']].id
 movie_details = movies_data[movies_data['id'] == movie_id]
 
-with st.spinner(text='Loading...'):
-    release_date = \
-    movie_details['release_date'].values[
-        0].replace('-', '/')
-    production_area = movie_details[
-        'production_countries'].values[
-        0]
-    genres = movie_details['genres'].values[
-        0]
-    runtime = int(
-        movie_details['runtime'].values[0])
+release_date = \
+movie_details['release_date'].values[
+    0].replace('-', '/')
+production_area = movie_details[
+    'production_countries'].values[
+    0]
+genres = movie_details['genres'].values[
+    0]
+runtime = int(
+    movie_details['runtime'].values[0])
 
-    crew = movie_details['crew'].values[0]
-    crew = crew[0:4]
-    l_crew = len(crew)
-    time.sleep(0.001)
+crew = movie_details['crew'].values[0]
+crew = crew[0:4]
+l_crew = len(crew)
 
 col1, col2, ecol1 = st.columns([0.9, 1.3, 0.3])
 
@@ -376,3 +375,4 @@ with icol2:
 
 with icol3:
     st.info(":brain: Data: [TMDB](https://www.kaggle.com/datasets/tmdb/tmdb-movie-metadata)")
+
