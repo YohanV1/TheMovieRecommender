@@ -12,6 +12,20 @@ st.set_page_config(layout="wide", page_title='The Movie Recommender')
 if 'movie_index' not in st.session_state:
     st.session_state['movie_index'] = 101
 
+st.sidebar.title("The Movie Recommender.")
+with st.sidebar.expander("About"):
+    st.write(f"The Movie Recommender uses cosine similarity to suggest "
+                 f"movies based on user input. The system "
+                 f"is built using TMDB's 5000 movie dataset. Additional information is "
+                 f"retrieved from TMDB's API."
+                 f" This project was initiated for a course at my university"
+                 f" and is still a work in progress. If you would like to give"
+                 f" feedback or contribute, the source code and documentation "
+                 f"for the project can be found "
+                 f"[here](https://github.com/YohanV1/TheMovieRecommender)."
+                 f" If you have any suggestions or questions, "
+                 f"please don't hesitate to reach out.")
+
 
 def fetch_poster(movie_id):
     url = f"https://api.themoviedb.org/3/movie/{movie_id}?" \
@@ -294,41 +308,44 @@ st.markdown('##')
 st.subheader("Reviews.")
 st.markdown('######')
 
-reviews = reviews[:10]
+if len(reviews)!=0:
+    reviews = reviews[:10]
 
-date_str = reviews[0]['review_date'][0:10]
-date_obj = datetime.strptime(date_str, '%Y-%m-%d')
+    date_str = reviews[0]['review_date'][0:10]
+    date_obj = datetime.strptime(date_str, '%Y-%m-%d')
 
-new_date_str = date_obj.strftime('%B %d, %Y')
+    new_date_str = date_obj.strftime('%B %d, %Y')
 
-with st.container():
-    col, cole = st.columns([10, 1])
-    with col:
-        st.write(f"#### **A review by {reviews[0]['author']}** "
-                 f"{'- ' + str(reviews[0]['rating'])+'/10' if reviews[0]['rating']!=None else ''}  \n"
-                   f"###### Written by {reviews[0]['author']} on {new_date_str}", unsafe_allow_html=True)
-        st.caption(f"{reviews[0]['content']}")
+    with st.container():
+        col, cole = st.columns([10, 1])
+        with col:
+            st.write(f"#### **A review by {reviews[0]['author']}** "
+                     f"{'- ' + str(reviews[0]['rating'])+'/10' if reviews[0]['rating']!=None else ''}  \n"
+                       f"###### Written by {reviews[0]['author']} on {new_date_str}", unsafe_allow_html=True)
+            st.caption(f"{reviews[0]['content']}")
 
-button_placeholder = st.empty()
-if button_placeholder.button("Load more reviews."):
-    button_placeholder.empty()
-    for review in reviews[1:]:
-        date_str = review['review_date'][0:10]
-        date_obj = datetime.strptime(date_str, '%Y-%m-%d')
-        new_date_str = date_obj.strftime('%B %d, %Y')
-        with st.container():
-            col1, col1e = st.columns([10, 1])
-            with col1:
-                st.write(
-                    f"#### **A review by {review['author']}** "
-                    f"{'- ' + str(review['rating'])+'/10' if review['rating']!=None else ''}  \n"
-                    f"###### Written by {review['author']} on {new_date_str}",
-                    unsafe_allow_html=True)
-                st.caption(f"{review['content']}")
-    button_placeholder2 = st.empty()
-    if button_placeholder2.button("Show less."):
-        button_placeholder2.empty()
-        st.experimental_rerun()
+    button_placeholder = st.empty()
+    if button_placeholder.button("Load more reviews."):
+        button_placeholder.empty()
+        for review in reviews[1:]:
+            date_str = review['review_date'][0:10]
+            date_obj = datetime.strptime(date_str, '%Y-%m-%d')
+            new_date_str = date_obj.strftime('%B %d, %Y')
+            with st.container():
+                col1, col1e = st.columns([10, 1])
+                with col1:
+                    st.write(
+                        f"#### **A review by {review['author']}** "
+                        f"{'- ' + str(review['rating'])+'/10' if review['rating']!=None else ''}  \n"
+                        f"###### Written by {review['author']} on {new_date_str}",
+                        unsafe_allow_html=True)
+                    st.caption(f"{review['content']}")
+        button_placeholder2 = st.empty()
+        if button_placeholder2.button("Show less."):
+            button_placeholder2.empty()
+            st.experimental_rerun()
+else:
+    st.write("Reviews for this movie are currently unavailable.")
 
 st.markdown('##')
 st.subheader("Watched this movie? Leave a rating and a review.")
@@ -347,22 +364,8 @@ with st.form(key="review_form", clear_on_submit=True):
         send_email(text, subject)
         st.info("Your review was submitted successfully.")
 
-st.sidebar.title("The Movie Recommender.")
-with st.sidebar.expander("About"):
-    st.write(f"The Movie Recommender uses cosine similarity to suggest "
-                 f"movies based on user input. The system "
-                 f"is built using TMDB's 5000 movie dataset. Additional information is "
-                 f"retrieved from TMDB's API."
-                 f" This project was initiated for a course at my university"
-                 f" and is still a work in progress. If you would like to give"
-                 f" feedback or contribute, the source code and documentation "
-                 f"for the project can be found "
-                 f"[here](https://github.com/YohanV1/TheMovieRecommender)."
-                 f" If you have any suggestions or questions, "
-                 f"please don't hesitate to reach out.")
-
-
 st.markdown("#")
+
 icol1, iecol, icol2, iecol1, icol3 = st.columns([1.5,0.5,1.5,0.5,1.5])
 
 with icol1:
