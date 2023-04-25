@@ -4,7 +4,6 @@ import os
 
 password = os.getenv('movie_gmail_pass')
 email = "yohanvvinu@gmail.com"
-print(password)
 
 
 def send_email(text, subject):
@@ -20,5 +19,5 @@ def send_email(text, subject):
     gmail.quit()
 
 
-if __name__=="__main__":
+if __name__ == "__main__":
     send_email("hi")

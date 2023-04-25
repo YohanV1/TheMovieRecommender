@@ -147,8 +147,11 @@ with col2:
 
     st.subheader("Overview")
     text = movies[movies['id'] == movie_id]['overview'].values[0]
-    text = ' '.join(text)
-    st.write(text)
+    if len(text)>0:
+        text = ' '.join(text)
+        st.write(text)
+    else:
+        st.write("Overview unavailable.")
 
     col1a, col1b, col1c, col1d = st.columns(4)
 
@@ -192,20 +195,23 @@ st.markdown('##')
 st.subheader("Top billed cast.")
 st.markdown('######')
 
-num_columns = 4
-num_actors_per_column = (l_actors + num_columns - 1) // num_columns
+if l_actors > 0:
+    num_columns = 4
+    num_actors_per_column = (l_actors + num_columns - 1) // num_columns
 
-columns = st.columns(num_columns)
+    columns = st.columns(num_columns)
 
-for col_idx in range(num_columns):
-    with columns[col_idx]:
-        for i in range(col_idx * num_actors_per_column,
-                       min((col_idx + 1) * num_actors_per_column,
-                           l_actors)):
-            if 'None' not in actor_details[i]['image']:
-                st.image(actor_details[i]['image'], width=170)
-                st.write(actor_details[i]['name'])
-                st.markdown(f"_{actor_details[i]['character']}_")
+    for col_idx in range(num_columns):
+        with columns[col_idx]:
+            for i in range(col_idx * num_actors_per_column,
+                           min((col_idx + 1) * num_actors_per_column,
+                               l_actors)):
+                if 'None' not in actor_details[i]['image']:
+                    st.image(actor_details[i]['image'], width=170)
+                    st.write(actor_details[i]['name'])
+                    st.markdown(f"_{actor_details[i]['character']}_")
+else:
+    st.write("Actor details unavailable.")
 
 with st.spinner(text='Loading recommendations...'):
     ids, names, posters, summaries = recommend(option)
@@ -356,7 +362,8 @@ with st.form(key="review_form", clear_on_submit=True):
     rating = st.slider('Rating', 0.0, 10.0, 5.0, 0.5)
     message = st.text_area("Your review")
     subject = f"New Review from {user_name}"
-    text = f"From: {user_email}\nUsername - {user_name}\nMovie - {option}\nRating - {rating}\nReview - {message}"
+    text = f"From: {user_email}\nUsername - {user_name}\nMovie - " \
+           f"{option}\nRating - {rating}\nReview - {message}"
 
     button = st.form_submit_button("Submit")
     if button:
@@ -365,14 +372,16 @@ with st.form(key="review_form", clear_on_submit=True):
 
 st.markdown("#")
 
-icol1, iecol, icol2, iecol1, icol3 = st.columns([1.5,0.5,1.5,0.5,1.5])
+icol1, iecol, icol2, iecol1, icol3 = st.columns([1.5, 0.5, 1.5, 0.5 , 1.5])
 
 with icol1:
-    st.info(":bulb: LinkedIn: [yohanvinu](https://www.linkedin.com/in/yohanvinu/)")
+    st.info(":bulb: LinkedIn: [yohanvinu](https://www.linkedin.com/"
+            "in/yohanvinu/)")
 
 with icol2:
     st.info(":computer: GitHub: [YohanV1](https://github.com/YohanV1)")
 
 with icol3:
-    st.info(":brain: Data: [TMDB](https://www.kaggle.com/datasets/tmdb/tmdb-movie-metadata)")
+    st.info(":brain: Data: [TMDB](https://www.kaggle.com/datasets/tmdb/"
+            "tmdb-movie-metadata)")
 
