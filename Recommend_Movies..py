@@ -339,16 +339,11 @@ with st.form(key="review_form", clear_on_submit=True):
     user_email = st.text_input("Your email address")
     rating = st.slider('Rating', 0.0, 10.0, 5.0, 0.5)
     message = st.text_area("Your review")
-    text = f"\n\nUsername - {user_name}\nMovie - {option}\nRating - {rating}\nReview - {message}"
-    message = f"""\
-    Subject: New Review From a User!
-    
-    From: {user_email}
-    {text}
-    """
+    text = f"From: {user_email}\nUsername - {user_name}\nMovie - {option}\nRating - {rating}\nReview - {message}"
+
     button = st.form_submit_button("Submit")
     if button:
-        send_email(message)
+        send_email(text)
         st.info("Your review was submitted successfully.")
 
 st.sidebar.title("The Movie Recommender.")

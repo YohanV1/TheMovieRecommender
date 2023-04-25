@@ -1,17 +1,24 @@
 import smtplib
-import ssl
+from email.message import EmailMessage
 import os
 
+password = os.getenv('movie_gmail_pass')
+email = "yohanvvinu@gmail.com"
+print(password)
 
-def send_email(message):
-    host = "smtp.gmail.com"
-    port = 465
 
-    username = "yohanvvinu@gmail.com"
-    password = os.getenv("PASSWORD")
-    receiver = "yohanvvinu@gmail.com"
-    context = ssl.create_default_context()
+def send_email(text):
+    email_message = EmailMessage()
+    email_message["Subject"] = "New Review From a User."
+    email_message.set_content(text)
 
-    with smtplib.SMTP_SSL(host, port, context=context) as server:
-        server.login(username, password)
-        server.sendmail(username, receiver, message)
+    gmail = smtplib.SMTP("smtp.gmail.com", 587)
+    gmail.ehlo()
+    gmail.starttls()
+    gmail.login(email, password)
+    gmail.sendmail(email, email, email_message.as_string())
+    gmail.quit()
+
+
+if __name__=="__main__":
+    send_email("hi")
