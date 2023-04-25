@@ -339,11 +339,12 @@ with st.form(key="review_form", clear_on_submit=True):
     user_email = st.text_input("Your email address")
     rating = st.slider('Rating', 0.0, 10.0, 5.0, 0.5)
     message = st.text_area("Your review")
+    subject = f"New Review from {user_name}"
     text = f"From: {user_email}\nUsername - {user_name}\nMovie - {option}\nRating - {rating}\nReview - {message}"
 
     button = st.form_submit_button("Submit")
     if button:
-        send_email(text)
+        send_email(text, subject)
         st.info("Your review was submitted successfully.")
 
 st.sidebar.title("The Movie Recommender.")
@@ -372,11 +373,3 @@ with icol2:
 
 with icol3:
     st.info(":brain: Data: [TMDB](https://www.kaggle.com/datasets/tmdb/tmdb-movie-metadata)")
-
-
-
-
-
-
-
-

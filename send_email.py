@@ -7,9 +7,9 @@ email = "yohanvvinu@gmail.com"
 print(password)
 
 
-def send_email(text):
+def send_email(text, subject):
     email_message = EmailMessage()
-    email_message["Subject"] = "New Review From a User."
+    email_message["Subject"] = subject
     email_message.set_content(text)
 
     gmail = smtplib.SMTP("smtp.gmail.com", 587)
