@@ -7,7 +7,6 @@ import time
 from send_email import send_email
 from datetime import datetime
 
-
 st.set_page_config(layout="wide", page_title='The Movie Recommender')
 
 if 'movie_index' not in st.session_state:
@@ -16,16 +15,17 @@ if 'movie_index' not in st.session_state:
 st.sidebar.title("The Movie Recommender.")
 with st.sidebar.expander("About"):
     st.write(f"The Movie Recommender uses cosine similarity to suggest "
-                 f"movies based on user input. The system "
-                 f"is built using TMDB's 5000 movie dataset. Additional information is "
-                 f"retrieved from TMDB's API."
-                 f" This project was initiated for a course at my university"
-                 f" and is still a work in progress. If you would like to give"
-                 f" feedback or contribute, the source code and documentation "
-                 f"for the project can be found "
-                 f"[here](https://github.com/YohanV1/TheMovieRecommender)."
-                 f" If you have any suggestions or questions, "
-                 f"please don't hesitate to reach out.")
+             f"movies based on user input. The system "
+             f"is built using TMDB's 5000 movie dataset. Additional "
+             f"information is "
+             f"retrieved from TMDB's API."
+             f" This project was initiated for a course at my university"
+             f" and is still a work in progress. If you would like to give"
+             f" feedback or contribute, the source code and documentation "
+             f"for the project can be found "
+             f"[here](https://github.com/YohanV1/TheMovieRecommender)."
+             f" If you have any suggestions or questions, "
+             f"please don't hesitate to reach out.")
 
 
 def fetch_poster(movie_id):
@@ -59,7 +59,8 @@ def fetch_reviews(movie_id):
         d = {'author': reviews['author'],
              'author_path': reviews['author_details']['avatar_path'],
              'rating': reviews['author_details']['rating'],
-             'content': reviews['content'], 'review_date': reviews['created_at']}
+             'content': reviews['content'],
+             'review_date': reviews['created_at']}
         review_details.append(d)
     return review_details
 
@@ -79,8 +80,8 @@ def recommend(movie):
         movie_id = movies.iloc[i[0]].id
         recommended_movies_ids.append(movie_id)
         recommended_movies.append(movies.iloc[i[0]].title)
-        recommended_movies_summaries.append\
-            (' '.join(movies.iloc[i[0]].overview))
+        recommended_movies_summaries.append(' '
+                                            .join(movies.iloc[i[0]].overview))
         recommended_movie_posters.append(fetch_poster(movie_id))
 
     return recommended_movies_ids, recommended_movies, \
@@ -101,7 +102,8 @@ titles = list(movies['title'])
 
 st.title('The Movie Recommender.')
 
-option = st.selectbox('Select a movie.', titles, index=st.session_state['movie_index'])
+option = st.selectbox('Select a movie.'
+                      '', titles, index=st.session_state['movie_index'])
 
 if titles.index(option) != st.session_state['movie_index']:
     st.session_state['movie_index'] = titles.index(option)
@@ -111,8 +113,8 @@ movie_id = movies.iloc[st.session_state['movie_index']].id
 movie_details = movies_data[movies_data['id'] == movie_id]
 
 release_date = \
-movie_details['release_date'].values[
-    0].replace('-', '/')
+    movie_details['release_date'].values[
+        0].replace('-', '/')
 production_area = movie_details[
     'production_countries'].values[
     0]
@@ -147,7 +149,7 @@ with col2:
 
     st.subheader("Overview")
     text = movies[movies['id'] == movie_id]['overview'].values[0]
-    if len(text)>0:
+    if len(text) > 0:
         text = ' '.join(text)
         st.write(text)
     else:
@@ -237,7 +239,8 @@ with col2:
         st.session_state['movie_index'] = titles.index(names[1])
         st.experimental_rerun()
     st.image(posters[1], width=250)
-    st.write(f"Rating: {(movies_data[movies_data['id'] == ids[1]]['vote_average'].values[0] + 0.6).round(1)}")
+    st.write(
+        f"Rating: {(movies_data[movies_data['id'] == ids[1]]['vote_average'].values[0] + 0.6).round(1)}")
     st.caption(f'{summaries[1][:200]}...')
 
 with col3:
@@ -245,7 +248,8 @@ with col3:
         st.session_state['movie_index'] = titles.index(names[2])
         st.experimental_rerun()
     st.image(posters[2], width=250)
-    st.write(f"Rating: {(movies_data[movies_data['id'] == ids[2]]['vote_average'].values[0] + 0.6).round(1)}")
+    st.write(
+        f"Rating: {(movies_data[movies_data['id'] == ids[2]]['vote_average'].values[0] + 0.6).round(1)}")
     st.caption(f'{summaries[2][:200]}...')
 
 col4, ecol3, col5, ecol4, col6 = st.columns([1.5, 0.5, 1.5, 0.5, 1.5])
@@ -302,7 +306,8 @@ with col9:
         st.session_state['movie_index'] = titles.index(names[8])
         st.experimental_rerun()
     st.image(posters[8], width=250)
-    st.write(f"Rating: {(movies_data[movies_data['id'] == ids[8]]['vote_average'].values[0]+0.6).round(1)}")
+    st.write(
+        f"Rating: {(movies_data[movies_data['id'] == ids[8]]['vote_average'].values[0] + 0.6).round(1)}")
     st.caption(f'{summaries[8][:200]}...')
 
 with st.spinner("Loading reviews..."):
@@ -313,7 +318,7 @@ st.markdown('##')
 st.subheader("Reviews.")
 st.markdown('######')
 
-if len(reviews)!=0:
+if len(reviews) != 0:
     reviews = reviews[:10]
 
     date_str = reviews[0]['review_date'][0:10]
@@ -325,8 +330,9 @@ if len(reviews)!=0:
         col, cole = st.columns([10, 1])
         with col:
             st.write(f"#### **A review by {reviews[0]['author']}** "
-                     f"{'- ' + str(reviews[0]['rating'])+'/10' if reviews[0]['rating']!=None else ''}  \n"
-                       f"###### Written by {reviews[0]['author']} on {new_date_str}", unsafe_allow_html=True)
+                     f"{'- ' + str(reviews[0]['rating']) + '/10' if reviews[0]['rating'] is not None else ''}  \n"
+                     f"###### Written by {reviews[0]['author']} on {new_date_str}",
+                     unsafe_allow_html=True)
             st.caption(f"{reviews[0]['content']}")
 
     button_placeholder = st.empty()
@@ -341,7 +347,7 @@ if len(reviews)!=0:
                 with col1:
                     st.write(
                         f"#### **A review by {review['author']}** "
-                        f"{'- ' + str(review['rating'])+'/10' if review['rating']!=None else ''}  \n"
+                        f"{'- ' + str(review['rating']) + '/10' if review['rating'] is not None else ''}  \n"
                         f"###### Written by {review['author']} on {new_date_str}",
                         unsafe_allow_html=True)
                     st.caption(f"{review['content']}")
@@ -372,7 +378,7 @@ with st.form(key="review_form", clear_on_submit=True):
 
 st.markdown("#")
 
-icol1, iecol, icol2, iecol1, icol3 = st.columns([1.5, 0.5, 1.5, 0.5 , 1.5])
+icol1, iecol, icol2, iecol1, icol3 = st.columns([1.5, 0.5, 1.5, 0.5, 1.5])
 
 with icol1:
     st.info(":bulb: LinkedIn: [yohanvinu](https://www.linkedin.com/"
@@ -384,4 +390,3 @@ with icol2:
 with icol3:
     st.info(":brain: Data: [TMDB](https://www.kaggle.com/datasets/tmdb/"
             "tmdb-movie-metadata)")
-
