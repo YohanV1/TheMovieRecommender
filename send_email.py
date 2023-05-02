@@ -1,8 +1,9 @@
 import smtplib
 from email.message import EmailMessage
 import os
+import streamlit as st
 
-password = os.getenv('movie_gmail_pass')
+password = st.secrets['movie_gmail_pass']
 email = "yohanvvinu@gmail.com"
 
 
