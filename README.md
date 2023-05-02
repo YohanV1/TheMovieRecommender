@@ -3,6 +3,8 @@
 ![Python version](https://img.shields.io/badge/Python-3.11.0-lightgrey) ![Framework](https://img.shields.io/badge/Framework-Streamlit-blue) ![API](https://img.shields.io/badge/API-TMDB-red) ![License](https://img.shields.io/badge/License-MIT-orange)
 ![Status](https://img.shields.io/badge/Status-Active-brightgreen) ![Contributions](https://img.shields.io/badge/Contributions-Welcome-green)
 
+Application Link: https://yohanv1-themovierecommender.streamlit.app/
+
 This application implements the Streamlit framework for the UI and frontend. The recommendation system works on the concept of cosine similarity, which is a way to measure how similar two movies are to each other based on the features they share, such as genre, cast, and plot. The project utilizes the '[TDMB 5000 Movie Dataset](https://www.kaggle.com/datasets/tmdb/tmdb-movie-metadata?select=tmdb_5000_movies.csv)' from Kaggle, and additional data is fetched from [TMDB's API](https://developers.themoviedb.org/3/getting-started/introduction) to supplement missing or limited information. This project was initiated for a course at my university and is still a work in progress. 
 
 ### Features
@@ -50,8 +52,8 @@ If you found an issue or would like to submit an improvement to the project, ple
 Contributions to this project are welcome. If you would like to contribute, please fork the repository and submit a pull request.
 
 ## Known Issues
-* TMDB's API should work for most people but some ISPs have blocked the domain. In such a case, you can use a VPN or another network.
-* Actor data is scattered across it's container if there is not enough actor information for the particular movie.
+* TMDB's API should work for most people, but some ISPs have blocked the domain. In such a case, you can use a VPN or another network. If images don't load, it is probably an issue with the API's connectivity.
+* Actor data is scattered across it's container if there isn't enough actor information for the particular movie.
 
 ## License
 This project is licensed under the MIT License. See the [LICENSE file](https://github.com/YohanV1/TheMovieRecommender/blob/main/LICENSE) for more information.
