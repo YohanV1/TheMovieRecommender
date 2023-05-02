@@ -1,0 +1,7 @@
+numpy==1.24.1
+numpy==1.24.3
+pandas==1.5.3
+pandas==2.0.1
+Requests==2.29.0
+streamlit==1.17.0
+streamlit==1.21.0
