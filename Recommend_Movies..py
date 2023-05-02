@@ -91,10 +91,10 @@ def recommend(movie):
 
 @st.cache_resource
 def load_data():
-    movies = pickle.load(open('models/movies.pkl', 'rb'))
-    movies_details = pickle.load(open('models/movies_data.pkl', 'rb'))
-    similarity = pickle.load(open('models/similarity.pkl', 'rb'))
-    return movies, movies_details, similarity
+    movies = pd.read_pickle('models/movies.pkl')
+    movies_data = pd.read_pickle('models/movies_data.pkl')
+    similarity = pd.read_pickle('models/similarity.pkl')
+    return movies, movies_data, similarity
 
 
 movies, movies_data, similarity = load_data()
