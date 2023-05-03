@@ -46,6 +46,7 @@ To recommend movies based on user input, we can calculate the cosine similarity 
 2. The `Recommend_Movies..py` file is the UI and frontend of the application. The previously pickled data is simply loaded, and additional information is fetched via the API. 
 3. The `send_email.py` is the mailer used in the application to recieve feedback and user reviews. 
 
+> Note: When running the application locally for the first time, you may get a streamlit warning along with an error. This can be ignored. Run the application again and it should be fine.
 ## Contributions
 If you found an issue or would like to submit an improvement to the project, please submit an issue in the issues tab above. If you would like to submit a PR, please reference the issue you created.
 
@@ -54,6 +55,7 @@ Contributions to this project are welcome. If you would like to contribute, plea
 ## Known Issues
 * TMDB's API should work for most people, but some ISPs have blocked the domain. In such a case, you can use a VPN or another network. If images don't load, it is probably an issue with the API's connectivity.
 * Actor data is scattered across it's container if there isn't enough actor information for the particular movie.
+* The application's images are not yet responsive to smaller devices/screens
 
 ## License
 This project is licensed under the MIT License. See the [LICENSE file](https://github.com/YohanV1/TheMovieRecommender/blob/main/LICENSE) for more information.
